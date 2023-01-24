@@ -1,6 +1,11 @@
-import React, { Component } from "react";
+//** Libraries */
+import React, { Component, useEffect } from "react";
+//** Components */
 import DiscoverBlock from "./DiscoverBlock/components/DiscoverBlock";
+//** Styles */
 import "../styles/_discover.scss";
+//** Utils */
+import { testing } from '../../../utils/spotify/spotify.utils';
 
 export default class Discover extends Component {
   constructor() {
@@ -12,9 +17,15 @@ export default class Discover extends Component {
       categories: [],
     };
   }
-
+  componentDidMount() 
+  { 
+    console.log(testing())
+  } 
+  
   render() {
     const { newReleases, playlists, categories } = this.state;
+
+   
 
     return (
       <div className="discover">
