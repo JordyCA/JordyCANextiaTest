@@ -94,5 +94,9 @@
       box-shadow: $mid-box-shadow;
       border-radius: 50%;
     }
+
+    > a {
+      color: white;
+    }
   }
 }
