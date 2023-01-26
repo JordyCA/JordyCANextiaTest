@@ -1,13 +1,16 @@
 //** Libraries */
-import React, { Component, useEffect } from "react";
+import React, { Component } from "react";
 //** Components */
 import DiscoverBlock from "./DiscoverBlock/components/DiscoverBlock";
 //** Styles */
 import "../styles/_discover.scss";
 //** Utils */
-import { testing } from '../../../utils/spotify/spotify.utils';
-
+import { generateAccountToken, getNewReleases } from '../../../utils/spotify/spotify.utils';
+//** Contexts */
+import { UserContext } from '../../../contexts/user/user.context'
 export default class Discover extends Component {
+  static contextType = UserContext;
+
   constructor() {
     super();
 
@@ -15,18 +18,48 @@ export default class Discover extends Component {
       newReleases: [],
       playlists: [],
       categories: [],
+      isChargedReleases:  false,
     };
+    
+  //  console.log(this.context);
   }
-  componentDidMount() 
-  { 
-    console.log(testing())
-  } 
-  
+
+  componentDidUpdate() {
+    
+    const chargeNewReleases = async () => {
+      if ( this.context.tokenUser !== null && !this.state.isChargedReleases) {
+        console.log(this.context.tokenUser);
+        const {data} = await getNewReleases(this.context.tokenUser);
+        this.setState({
+          newReleases: data.albums.items,
+          isChargedReleases: true,
+        });
+      }
+    }
+
+    
+    chargeNewReleases();
+    
+  }
+
   render() {
     const { newReleases, playlists, categories } = this.state;
 
-   
+    const createToken = async () => {
+      if ( this.context.tokenUser === null ) {
+        const {data:{ access_token }} = await generateAccountToken();
+        console.log(access_token)
+        this.context.addToken(access_token);
+      } else {
+        //console.log('%cDiscover.js line:37 this.context.tokeUser', 'color: #007acc;', this.context.tokeUser);
+      }
+    }
 
+    createToken();
+    
+
+    console.log( this.state.newReleases );
+    //console.log('%cDiscover.js line:45 this.context.tokenUser', 'color: #007acc;', this.context.tokenUser);
     return (
       <div className="discover">
         <DiscoverBlock
