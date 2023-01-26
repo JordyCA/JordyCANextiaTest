@@ -5,7 +5,12 @@ import DiscoverBlock from "./DiscoverBlock/components/DiscoverBlock";
 //** Styles */
 import "../styles/_discover.scss";
 //** Utils */
-import { generateAccountToken, getNewReleases } from '../../../utils/spotify/spotify.utils';
+import { 
+  generateAccountToken, 
+  getNewReleases, 
+  getFeaturedPlaylists, 
+  getCategories,
+  getUserData, } from '../../../utils/spotify/spotify.utils';
 //** Contexts */
 import { UserContext } from '../../../contexts/user/user.context'
 export default class Discover extends Component {
@@ -18,18 +23,18 @@ export default class Discover extends Component {
       newReleases: [],
       playlists: [],
       categories: [],
-      isChargedReleases:  false,
+      isChargedReleases: false,
+      isChargedPlayList: false,
+      isChargedCategories: false,
+      isChargeUser: false,
     };
-    
-  //  console.log(this.context);
   }
 
+  
   componentDidUpdate() {
-    
     const chargeNewReleases = async () => {
-      if ( this.context.tokenUser !== null && !this.state.isChargedReleases) {
-        console.log(this.context.tokenUser);
-        const {data} = await getNewReleases(this.context.tokenUser);
+      if (this.context.tokenUser !== null && !this.state.isChargedReleases) {
+        const { data } = await getNewReleases(this.context.tokenUser);
         this.setState({
           newReleases: data.albums.items,
           isChargedReleases: true,
@@ -37,29 +42,59 @@ export default class Discover extends Component {
       }
     }
 
-    
+    const chargeNewFeaturedPlaylist = async () => {
+      if (this.context.tokenUser !== null && !this.state.isChargedPlayList) {
+        const {data} = await getFeaturedPlaylists(this.context.tokenUser);
+        this.setState({
+          playlists: data.playlists.items,
+          isChargedPlayList: true,
+        });
+      }
+    }
+
+  const chargeCategories = async () => {
+    if (this.context.tokenUser !== null && !this.state.isChargedCategories) {
+      const {data} = await getCategories(this.context.tokenUser); 
+      this.setState({
+        categories: data.categories.items,
+        isChargedCategories: true,
+      });
+    }
+  }
+
+  const chargeUser = async () => {
+    if (this.context.tokenUser !== null && !this.state.isChargeUser) {
+      const {data} = await getUserData(this.context.tokenUser);
+      this.context.addUserData(data);
+      this.setState({
+        isChargeUser: true
+      });
+    }
+  }
+  
+  try {
     chargeNewReleases();
+    chargeNewFeaturedPlaylist();
+    chargeCategories();
+    chargeUser();
+  } catch (e) {
+    console.log(e)
+  }
     
   }
 
   render() {
-    const { newReleases, playlists, categories } = this.state;
+    const { newReleases, playlists, categories} = this.state;
 
     const createToken = async () => {
-      if ( this.context.tokenUser === null ) {
-        const {data:{ access_token }} = await generateAccountToken();
-        console.log(access_token)
+      if ( this.context.tokenUser === null) {
+        const { data: { access_token } } = await generateAccountToken();
         this.context.addToken(access_token);
-      } else {
-        //console.log('%cDiscover.js line:37 this.context.tokeUser', 'color: #007acc;', this.context.tokeUser);
       }
     }
 
     createToken();
-    
 
-    console.log( this.state.newReleases );
-    //console.log('%cDiscover.js line:45 this.context.tokenUser', 'color: #007acc;', this.context.tokenUser);
     return (
       <div className="discover">
         <DiscoverBlock

@@ -24,12 +24,17 @@ function renderSideBarOption(link, icon, text, { selected } = {}) {
   );
 }
 
-export default function SideBar() {
+export default function SideBar( {userData}) {
+  console.log('%cSideBar.js line:28 userData', 'color: #007acc;', userData);
+  console.log(userData.external_urls?.spotify);
   return (
     <div className="sidebar">
       <div className="sidebar__profile">
         <Avatar />
-        <p>Ernesto Vargas</p>
+        <p>{userData.display_name ? userData.display_name : "Sin acceso."}</p> 
+        {
+          userData.external_urls?.spotify ? (<a href={userData.external_urls?.spotify} target="_blank">Tu perfil en spotify</a> ) :""
+        }
       </div>
       <div className="sidebar__options">
         {renderSideBarOption("/", faHeadphonesAlt, "Descubre", {
