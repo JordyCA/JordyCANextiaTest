@@ -6,8 +6,6 @@ import Navigation from './routes/navigation/navigation.route.jsx';
 import Home from './routes/home/home.route.jsx';
 import Tickets from './routes/tikects/tickets.route.jsx';
 
-//** Contexts */
-import { UserProvider } from './contexts/user/user.context';
 
 
 function App() {

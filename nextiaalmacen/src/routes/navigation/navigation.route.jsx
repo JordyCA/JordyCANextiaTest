@@ -6,7 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 //**Components */
-import NavBar from '../../components/Navbar/navbar.component';
+import NavBar from '../../components/navbar/navbar.component';
 
 const Navigation = () => {
     return (
