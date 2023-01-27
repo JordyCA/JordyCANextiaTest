@@ -1,0 +1,7 @@
+.nav__link {
+    text-decoration: none;
+    color: white;
+}
+.nav__link:hover {
+    color: white;
+}
