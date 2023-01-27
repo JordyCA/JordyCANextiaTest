@@ -12,12 +12,13 @@ import { Col } from 'react-bootstrap';
 
 //** Components */
 import Logo from '../logo/logo.component';
-
+import Alerts from '../alerts/alerts.component';
 //** Context */,
 import { UserContext } from '../../contexts/user/user.context';
 
 //** Utils */
 import { generateAccountToken } from '../../utils/nextwms/nextwms.utils';
+import { TYPES_ALERTS } from '../../utils/typesAlerts/typeAlerts.utils';
 
 //** Styles */
 import './signInForm.style.css';
@@ -52,7 +53,11 @@ const SignInFormasync = () => {
                 }
             } catch (error) {
                 console.log('%csignInForm.component.jsx line:45 errro', 'color: #007acc;', error);
-                console.log(error.code)
+                console.log(error.code);
+                window.document.getElementById("signInErr").style.display =  'block';
+                setTimeout(() => {
+                    window.document.getElementById("signInErr").style.display =  'none';
+                }, 5000);
             }
         }
 
@@ -64,6 +69,7 @@ const SignInFormasync = () => {
         <Row className='signIn__Row' key="signIn">
             <Col>
                 <Logo />
+                <Alerts typeAlert={TYPES_ALERTS.ERROR} id="signInErr" message="No pudo ingresar, favor de vericar su información."/>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="formBasicText" >
                         <Form.Label>Usuario : </Form.Label>
@@ -77,7 +83,8 @@ const SignInFormasync = () => {
                     <Button variant="primary" type="submit">
                         Acceder
                     </Button>
-                </Form></Col>
+                </Form>
+            </Col>
         </Row>
     )
 }
