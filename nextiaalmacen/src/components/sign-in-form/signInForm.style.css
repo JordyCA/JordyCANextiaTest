@@ -1,0 +1,6 @@
+.signIn__Row {
+    display: flex ;
+    align-items: center ;
+    text-align: center;
+    width: 100%;
+}
