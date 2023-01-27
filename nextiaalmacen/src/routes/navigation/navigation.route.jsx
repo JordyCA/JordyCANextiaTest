@@ -14,7 +14,7 @@ const Navigation = () => {
             <Container>
                 <Row>
                     <Col sm={4}><NavBar /></Col>
-                    <Col sm={8}><Outlet/></Col>
+                    <Col sm={8} className="d-flex align-items-center"><Outlet/></Col>
                 </Row>
             </Container>
         </Fragment>
